@@ -64,10 +64,11 @@ private static Configuration conf = null;
     public static void addRecord (String tableName, String row, String[] fields, String[] values)         
             throws Exception{         
         try {         
-            HTable table = new HTable(conf, tableName);         
+            HTable table = new HTable(conf, tableName);
+            
             for(int i = 0;i != fields.length;i++){
             	Put put = new Put(row.getBytes());
-            	String[] cols = fields[i].split(";");
+            	String[] cols = fields[i].split(":");
             	put.addColumn(cols[0].getBytes(), cols[1].getBytes(), values[i].getBytes());
             	table.put(put);
             }        
@@ -134,22 +135,48 @@ private static Configuration conf = null;
  
     public static void  main (String [] agrs) {         
         try {         
-            String tablename = "scores";         
-            String[] familys = {"grade", "course"};         
-            QuestionOne.creatTable(tablename, familys);         
+            String tablename = "Student";         
+            String[] familys = {"S_No", "S_Name","S_Sex","S_Age"}; 
+            String[] values1 = {"2015002","Zhangsan","male","23"};
+            String[] values2 = {"2015002","Mary","famale","22"};
+            String[] values3 = {"2015003","Lisi","male","24"};
+            QuestionTwo.creatTable(tablename, familys);         
                       
-            //add record zkb         
-            QuestionOne.addRecord(tablename,"zkb","grade","","5");         
-            QuestionOne.addRecord(tablename,"zkb","course","","90");         
-            QuestionOne.addRecord(tablename,"zkb","course","math","97");         
-            QuestionOne.addRecord(tablename,"zkb","course","art","87");         
-            //add record  baoniu         
-            QuestionOne.addRecord(tablename,"baoniu","grade","","4");         
-            QuestionOne.addRecord(tablename,"baoniu","course","math","89"); 
-            QuestionOne.addRecord(tablename,"baoniu","course","art","85"); 
+            //add record Student         
+            QuestionTwo.addRecord(tablename,"s001",familys,values1);         
+            QuestionTwo.addRecord(tablename,"s002",familys,values2);           
+            QuestionTwo.addRecord(tablename,"s003",familys,values3);                    
+            
+            String tablename1 = "Course";         
+            String[] familys1 = {"C_No", "C_Name","C_Credit"}; 
+            String[] values4 = {"123001","Math","2.0"};
+            String[] values5 = {"123002","Computer Science","5.0"};
+            String[] values6 = {"123003","English","3.0"};
+            QuestionOne.creatTable(tablename1, familys1); 
+            //add record  Course         
+            QuestionTwo.addRecord(tablename,"c001",familys1,values4);         
+            QuestionTwo.addRecord(tablename,"c002",familys1,values5);
+            QuestionTwo.addRecord(tablename,"c003",familys1,values6); 
+            
+            String tablename2 = "SC";         
+            String[] familys2 = {"SC_No", "SC_Cno","SC_Score"}; 
+            String[] values7 = {"2015001","123001","86"};
+            String[] values8 = {"2015001","123003","69"};
+            String[] values9 = {"2015002","123002","77"};
+            String[] values10 = {"2015002","123003","99"};
+            String[] values11 = {"2015003","123001","98"};
+            String[] values12 = {"2015003","123002","95"};
+            QuestionOne.creatTable(tablename2, familys2); 
+            //add record  SC         
+            QuestionTwo.addRecord(tablename,"sc001",familys2,values7);         
+            QuestionTwo.addRecord(tablename,"sc002",familys2,values8);
+            QuestionTwo.addRecord(tablename,"sc003",familys2,values9);
+            QuestionTwo.addRecord(tablename,"sc001",familys2,values10);         
+            QuestionTwo.addRecord(tablename,"sc002",familys2,values11);
+            QuestionTwo.addRecord(tablename,"sc003",familys2,values12); 
                       
             System.out.println("===========get one record========");         
-            QuestionOne.getOneRecord(tablename, "zkb");         
+            QuestionOne.getOneRecord(tablename, "2015001");         
                       
             System.out.println("===========show all record========");         
             QuestionOne.getAllRecord(tablename);         
